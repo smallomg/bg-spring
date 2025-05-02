@@ -32,9 +32,12 @@ public class MyController {
         this.demoApplication = demoApplication;
     }
 	
-	@RequestMapping("/")
+    // 요청처리 - 컨트롤러의 멤버 메소드 (예 : 3개의 요청 ---> 3개의 메소드)
+	@RequestMapping("/") //localhost:8090/
 	public @ResponseBody String root() {
 		System.out.println("root..............");
+		
+		// 응답 - 페이지 지정
 		return "Sptringboot start!";
 	}
 	
@@ -77,6 +80,10 @@ public class MyController {
 			@RequestParam("age") String age,
 			Model model) {
 		
+		// 컨트롤러가 뷰에 데이터를 전달 할 때 Model을 이용한다.
+		// String z = "Jame"; int r = 3;
+		// 오브젝트에 z,r이 들어갈수 있음
+		// addAttiribute(변수이름, 오브젝트)
 		model.addAttribute("name", name);
 		model.addAttribute("age", age);
 		
@@ -118,6 +125,12 @@ public class MyController {
     
     @PostMapping("/p1")
     public String p2(
+    		// 커맨드 규칙
+    		// 파라미터 이름과 멤버변수 이름이 같아야한다
+    		// 커맨드 객체를 만들때에는 변수명을 클래스이름과 똑같이 만들어라
+    		// 단) 첫번째 문단은 소문자로 
+    		
+    		
     		MemberDTO memberDTO,
     		
     		Model model
