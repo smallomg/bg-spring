@@ -1,0 +1,43 @@
+artifact : demo (프로젝트이름)
+
+규칙 도메인 package 
+
+
+spring web
+lombok
+
+라이브러리 새롭게 넣을시 
+build.gradle 우클릭
+Gradle - >reflash
+
+패키지 규칙
+
+커맨드객체는 기본생성자가 있어야한다
+
+405 에러
+mapping return 확인
+
+
+ 한 문장  IoC (Inversion of Control, 제어의 역전) 정의
+👉 객체의 생성과 의존성 관리를 개발자가 직접 하지 않고, 
+프레임워크(Spring)가 대신 해주는 것.
+
+DI (Dependency Injection, 의존성 주입)
+👉 객체가 스스로 의존 대상을 생성하지 않고, 
+외부(주로 Spring IoC 컨테이너)에서 주입받는 것
+
+생성자주입방식
+setter주입방식
+
+
+모델 1 방식 - jsp
+모델 2 방식 - Servlet + jsp + 클래스(DAO,Service) ex) mvc 방식
+m model모델 : 서버가 클라인언트에게 전달하는 데이터(를 처리하는 과정)
+v: jsp  클라이언트가 보는화면 view 서버가 제공한 데이터들
+c : 컨트롤러 - 요청 응답 servlet
+
+웹서버(정적인 페이지) + 동적데이터(WAS)
+	아파치 서버 	톰캣
+==================================
+서비스 제공---> 요청이있으면
+제공하다 --> 응답(페이지 +추가 데이터(처리))

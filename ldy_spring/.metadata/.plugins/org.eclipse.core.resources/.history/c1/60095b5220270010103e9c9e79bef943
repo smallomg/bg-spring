@@ -1,0 +1,55 @@
+package com.example.demo.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.example.demo.dao.MemberDAO;
+import com.example.demo.dto.MemberDTO;
+
+@Controller
+public class MemberController {
+	
+	@Autowired
+	private MemberDAO dao;
+	
+	
+	@RequestMapping("/")
+	public String root() {
+		System.out.println("root...............");
+		
+		return "index";
+	}
+	
+	@GetMapping("/list")
+	public String list(Model model) {
+		System.out.println("list..............");
+		
+		//List<MemberDTO> member =dao.getlist();
+		List<MemberDTO> member =dao.list();
+		
+		model.addAttribute("member",member);
+		
+		
+		return "list";
+	}
+	
+	@GetMapping("/list")
+	public String viewMember(String id) {
+		System.out.println("viewMember..............");
+		
+		//List<MemberDTO> member =dao.getlist();
+		MemberDTO member =dao.viewMember(id);
+		
+		model.addAttribute("member",member);
+		
+		
+		return "list";
+	}
+	
+}

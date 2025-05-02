@@ -1,0 +1,42 @@
+package com.example.demo.dao;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.example.demo.dto.MemberDTO;
+
+public class MemberDAO {
+
+	public List<MemberDTO> list() {
+		String query = "SELECT * FROM tbl_member";
+		
+		List<MemberDTO> list = new ArrayList<>();
+		
+		try(Connection conn= DBcon.getConnection();
+		Statement stmt = conn.createStatement();
+		ResultSet rs = stmt.executeQuery(query);){
+			
+			while(rs.next()) {
+				MemberDTO member = new MemberDTO();
+				member.setId(rs.getString("id"));
+				member.setPw(rs.getString("pw"));
+				member.setName(rs.getString("name"));
+				member.setPhone(rs.getString("phone"));
+				member.setGrade(rs.getString("grade"));
+				
+				list.add(member);
+			}
+			
+		}
+		catch(SQLException e) {e.printStackTrace();}
+		
+		
+		return list;
+
+	}
+
+}

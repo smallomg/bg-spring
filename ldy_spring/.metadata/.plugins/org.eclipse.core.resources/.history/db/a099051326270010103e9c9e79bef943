@@ -1,0 +1,73 @@
+package com.example.demo.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.example.demo.dao.MemberDAO;
+import com.example.demo.dto.MemberDTO;
+import com.sun.net.httpserver.HttpsParameters;
+
+import jakarta.servlet.http.HttpServletRequest;
+
+@Controller
+public class MemberController {
+	
+	@Autowired
+	private MemberDAO dao;
+	
+	
+	@RequestMapping("/")
+	public String root() {
+		System.out.println("root...............");
+		
+		return "index";
+	}
+	
+	@GetMapping("/list")
+	public String list(Model model) {
+		System.out.println("list..............");
+		
+		//List<MemberDTO> member =dao.getlist();
+		List<MemberDTO> member =dao.list();
+		
+		model.addAttribute("member",member);
+		
+		
+		return "list";
+	}
+	
+	@GetMapping("/viewMember")
+	public String viewMember(@RequestParam("id") String id,Model model) {
+		System.out.println("viewMember..............");
+		
+		MemberDTO member = dao.viewMember(id);
+		
+		
+		model.addAttribute("member",member);
+		
+		
+		return "viewmember";
+	}
+	
+	@GetMapping("/viewMember")
+	public String viewMember(HttpServletRequest request,Model model) {
+		System.out.println("viewMember..............");
+		String id = request.getParameter("id");
+		
+		MemberDTO member = dao.viewMember(id);
+		
+		
+		model.addAttribute("member",member);
+		
+		
+		return "viewmember";
+	}
+	
+}

@@ -1,0 +1,27 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Form Page</title>
+</head>
+<body>
+    <h1>FORM Page</h1>
+    <hr>
+    <form action="form" method="get">
+        ID : <input type="text" name="id"><br>
+        PW : <input type="password" name="pw"><br>
+        이름 : <input type="text" name="name"><br>
+        번호 : <input type="text" name="phone"><br>
+        <input type="submit" value="등록">
+    </form>
+
+    <hr>
+    <h2>제출된 데이터</h2>
+    <p>ID: ${id}</p>
+    <p>PW: ${pw}</p>
+    <p>이름: ${name}</p>
+    <p>번호: ${phone}</p>
+</body>
+</html>

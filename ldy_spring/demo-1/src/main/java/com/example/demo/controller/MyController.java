@@ -1,0 +1,20 @@
+package com.example.demo.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+@Controller
+public class MyController {
+	
+	 @PostMapping("/submit")
+	    public String handleSubmit(@RequestParam("name") String name,
+	                               @RequestParam("age") int age) {
+	        System.out.println("이름: " + name);
+	        System.out.println("나이: " + age);
+
+	        // 데이터 처리 후 뷰 이름 리턴
+	        return "index";  // 예: submitResult.jsp 또는 submitResult.html
+	    }
+}

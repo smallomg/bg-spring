@@ -1,0 +1,83 @@
+package com.example.demo.dao;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+
+import com.example.demo.dto.MemberDTO;
+
+
+
+@Repository  // Spring이 이 클래스를 Repository(DAO)로 인식하고 빈으로 관리하게 함
+public class MemberDAO {
+
+    @Autowired  // Spring이 JdbcTemplate 객체를 자동 주입해줌 (DB 연결, 쿼리 실행 도구)
+    private JdbcTemplate jt;
+
+    public MemberDTO viewMember() {
+    	 String query = "SELECT * FROM tbl_member WHERE id = ?";
+    	MemberDTO member = jt.queryForObject(
+    			query,
+    			 new BeanPropertyRowMapper<MemberDTO>(MemberDTO.class)
+    	 
+		return null;
+    	
+    }
+    
+    // 회원 목록 전체 조회 메서드
+    public List<MemberDTO> list() {
+        // 실행할 SQL 쿼리문 (회원 테이블에서 모든 컬럼, 모든 행 조회)
+        String query = "SELECT * FROM tbl_member";
+
+        // JdbcTemplate의 query() 메서드 실행:
+        // 첫 번째 인자 → 실행할 SQL 쿼리문
+        // 두 번째 인자 → 결과를 매핑할 RowMapper (BeanPropertyRowMapper는 컬럼명-필드명을 자동 매핑)
+        List<MemberDTO> list = jt.query(
+            query,
+            new BeanPropertyRowMapper<MemberDTO>(MemberDTO.class)
+            // => 이 부분이 ResultSet의 각 행을 MemberDTO 객체로 자동 변환
+            // ex) tbl_member의 id 컬럼 → MemberDTO의 setId() 메서드 호출
+        );
+
+        // 최종적으로 변환된 MemberDTO 객체들의 리스트 반환
+        return list;
+    }
+
+	
+	public List<MemberDTO> getlist() {
+		String query = "SELECT * FROM tbl_member";
+		
+		List<MemberDTO> list = new ArrayList<>();
+		
+		try(Connection conn= DBcon.getConnection();
+		Statement stmt = conn.createStatement();
+		ResultSet rs = stmt.executeQuery(query);){
+			
+			while(rs.next()) {
+				MemberDTO member = new MemberDTO();
+				member.setId(rs.getString("id"));
+				member.setPw(rs.getString("pw"));
+				member.setName(rs.getString("name"));
+				member.setPhone(rs.getString("phone"));
+				member.setGrade(rs.getString("grade"));
+				
+				list.add(member);
+			}
+			
+		}
+		catch(SQLException e) {e.printStackTrace();}
+		
+		
+		return list;
+
+	}
+
+}
