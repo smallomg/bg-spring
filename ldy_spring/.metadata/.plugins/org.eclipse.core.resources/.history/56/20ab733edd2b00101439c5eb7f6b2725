@@ -1,0 +1,52 @@
+package com.example.demo.dto;
+import lombok.Data;
+import java.util.List;
+
+@Data
+public class GyeongnamCultureListResponseDTO {
+    private GyeongnamCultureList gyeongnamculturallist;
+
+    @Data
+    public static class GyeongnamCultureList {
+        private Header header;
+        private Body body;
+    }
+
+    @Data
+    public static class Header {
+        private String resultCode;
+        private String resultMsg;
+    }
+
+    @Data
+    public static class Body {
+        private Items items;
+        private int numOfRows;
+        private int pageNo;
+        private int totalCount;
+    }
+
+    @Data
+    public static class Items {
+        private List<Item> item;
+    }
+
+    @Data
+    public static class Item {
+        private String DOJIJUNG_NO;
+        private String MYONGCHING;
+        private String MYONGCHING_HANMUN;
+        private String CONTENT;
+        private String MYONJUK;
+        private String SOYOUJA_NAME;
+        private String ADMIN_NAME;
+        private String SIDAE;
+        private String JIJUNG_DATE;
+        private String ADDRESS1;
+        private String UTMK_X;
+        private String UTMK_Y;
+        private String fileurl1;
+        private String fileurl2;
+        private String fileurl3;
+    }
+}

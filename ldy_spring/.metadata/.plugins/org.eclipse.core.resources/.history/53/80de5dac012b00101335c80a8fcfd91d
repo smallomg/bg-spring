@@ -1,0 +1,26 @@
+package com.example.demo.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+@Controller 
+// 1. return 활용(1) : view를 지정한다.
+// 2. return 활용(2) : 데이터를 전송한다.
+public class MyController {
+	
+	@RequestMapping("/")
+	public String root() {
+		System.out.println("root..........");
+
+		return "index";
+	}
+
+	/*
+	 * @RequestMapping("/req1") // ResponseBody 뷰를 의미하지 않고 데이터를 의미함
+	 * public @ResponseBody String req1() { System.out.println("req1..........");
+	 * 
+	 * return "hello this is mydata"; }
+	 */
+
+}

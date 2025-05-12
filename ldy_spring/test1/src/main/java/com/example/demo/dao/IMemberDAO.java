@@ -1,0 +1,35 @@
+package com.example.demo.dao;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+
+import com.example.demo.dto.MemberDTO;
+import com.example.demo.dto.BoardDTO;
+import com.example.demo.dto.Comments;
+
+@Mapper
+public interface IMemberDAO {
+	
+	
+	int insert(MemberDTO member);
+	
+	MemberDTO login(@Param("id") String id, @Param("pw") String pw);
+
+	List<BoardDTO> getList();
+	
+	void delete(@Param("bno")String bno);
+	
+	
+	// 댓글 추가
+	int cmtinsert(Comments com);
+	
+	
+	int boardinsert(@Param("board")BoardDTO board);
+	
+	int count();
+	
+	List<BoardDTO> getList2(@Param("f")int f,@Param("l")int l);
+}

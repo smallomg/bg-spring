@@ -1,0 +1,69 @@
+package com.example.demo.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.example.demo.dao.UserDAO;
+import com.example.demo.dto.UserDTO;
+
+@Controller
+public class UserController {
+	@Autowired
+	private UserDAO dao;
+
+	@RequestMapping("/")
+	public String root() {
+		System.out.println("root...............");
+		return "index";
+	}
+
+	@GetMapping("/signup")
+	public String signup() {
+		return "signup"; // signup.jsp 렌더링
+	}
+
+	@PostMapping("/SignUp")
+	public String signUp(UserDTO dto, Model model) {
+		System.out.println("insert..............");
+
+		int result = dao.insert(dto);
+		if (result > 0) {
+			model.addAttribute("msg", "회원가입 성공!");
+		} else {
+			model.addAttribute("msg", "회원가입 실패!");
+		}
+
+		return "index";
+	}
+
+	@GetMapping("/idcheck")
+	public @ResponseBody int idcheck(@RequestParam("id") String id) {
+	    UserDTO dto = new UserDTO();
+	    dto.setId(id);
+
+	    int result = dao.select(dto);
+	    if (result > 0) {
+	        return result;
+	    } else {
+	        return result;
+	    }
+	}
+	
+	@GetMapping("/pwCheck")
+	public @ResponseBody int pwCheck(@RequestParam("pw") String pw,@RequestParam("pwcheck") String pwcheck) {
+
+		if (pw.equals(pwcheck)) {
+		    return 1;
+		} else {
+		    return 0;
+		}
+	}
+
+
+}

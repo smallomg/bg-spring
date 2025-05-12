@@ -1,0 +1,61 @@
+package com.example.demo.json;
+
+// 인터넷에서 자료를 가져오려고 필요한 여러 가지 도구들을 불러와요
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+
+public class ApiExplorer {
+
+    // 이 함수는 인터넷에서 자료를 가져와서 글자(문자열)로 만들어 돌려줘요
+    public static String getJsonResponse() throws Exception {
+        // 1️⃣ 요청할 주소를 만들기 시작해요 (이 주소로 "문화재 정보 주세요!"라고 요청할 거예요)
+        StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/6480000/gyeongnamcultural/gyeongnamculturallist");
+
+        // 2️⃣ 주소에 붙일 여러 가지 정보들을 추가해요 (서비스키, 페이지번호, 결과타입 등)
+        urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=" + 
+                          "XyczoMkmgGUArIQjaYCLOd3k1ULL6ERcXleEHaIvIxXlQlQwY512FSK5HopseZ5T6vYYhOHUKhiM6%2BUDCqvMog%3D%3D");
+        urlBuilder.append("&" + URLEncoder.encode("pageNo", "UTF-8") + "=" + 
+                          URLEncoder.encode("1", "UTF-8"));  // 몇 번째 페이지를 볼지 (여기선 1페이지)
+        urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + 
+                          URLEncoder.encode("10", "UTF-8"));  // 한 번에 몇 개 가져올지 (여기선 10개)
+        urlBuilder.append("&" + URLEncoder.encode("resultType", "UTF-8") + "=" + 
+                          URLEncoder.encode("json", "UTF-8"));  // 결과는 'json' 형식으로 주세요!
+
+        // 3️⃣ 준비된 주소로 인터넷 연결을 만들어요
+        URL url = new URL(urlBuilder.toString());
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+        // 4️⃣ "GET" 방식으로 자료를 달라고 요청할 거예요
+        conn.setRequestMethod("GET");
+
+        // 5️⃣ "나는 json 데이터를 받을 거야"라고 알려줘요
+        conn.setRequestProperty("Content-type", "application/json");
+
+        // 6️⃣ 자료를 받을 준비를 해요 (잘 왔는지 코드로 확인)
+        BufferedReader rd;
+        if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+            // 200~300은 '성공'이니까 자료를 읽을 준비해요
+            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        } else {
+            // 성공이 아니면 에러 내용을 읽을 준비해요
+            rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+        }
+
+        // 7️⃣ 자료들을 한 줄씩 읽어서 다 합쳐요
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = rd.readLine()) != null) {
+            sb.append(line);
+        }
+
+        // 8️⃣ 다 읽었으면 마무리하고 연결을 끊어요
+        rd.close();
+        conn.disconnect();
+
+        // 9️⃣ 모은 자료를 문자열로 돌려줘요 (이걸 출력하면 json 모양 글자가 나와요)
+        return sb.toString();
+    }
+}

@@ -1,0 +1,121 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>Index Page</h1>
+	<hr>
+	<h4>1. Ajax Get 요청</h4>
+	<button onclick="getData()">1. Ajax Get 요청</button>
+	<div id="demo1">-------------</div>
+	<hr>
+	<h4>2-1. Ajax Get 요청2-1(User 정보 요청 : JSON 직접 작성)</h4>
+	<button onclick="getUserData()">2-1. Ajax Get 요청2-1</button>
+	<div id="demo2_1">-------------</div>
+	<hr>
+	<h4>2-2. Ajax Get 요청2-2(User 정보 요청 : Jackson 라이브러리 활용)</h4>
+	<button onclick="getUserData2()">2-2. Ajax Get 요청2-2</button>
+	<div id="demo2_2">-------------</div>
+	<hr>
+	<h4>3. Ajax Get 요청3(파라미터 보내기)</h4>
+	<button onclick="sendParameter()">3. Ajax Get 요청3</button>
+	<div id="demo3">---------------</div>
+	<hr>
+	<h4>4. Ajax Get 요청4(파라미터 보내기-패스이용)</h4>
+	<button onclick="sendParameter2()">3. Ajax Get 요청4</button>
+	<div id="demo4">---------------</div>
+	<hr>
+	<h4>5. Ajax Get 요청5</h4>
+	<button onclick="sendParameter3()">5. Ajax Get 요청5</button>
+	<div id="demo5">-------------</div>
+	<hr>
+	
+	<h4>1. Ajax POST 요청1</h4>
+	<button onclick="regData()">6. Ajax POST 요청6</button>
+	<div id="demo6">-------------</div>
+	<hr>
+	<h4>2. Ajax POST 요청2</h4>
+	<button onclick="regData()">6. Ajax POST 요청6</button>
+	<div id="demo6">-------------</div>
+
+	<script>
+		function getData() {
+			const xhr = new XMLHttpRequest();
+			xhr.onload = function() {
+				document.getElementById('demo1').innerHTML = xhr.responseText;
+			}
+			xhr.open('GET', 'req1');
+			xhr.send();
+		}
+
+		const demo2_1 = document.getElementById('demo2_1');
+		function getUserData() {
+			const xhr = new XMLHttpRequest();
+			xhr.onload = function() {
+				const obj = JSON.parse(xhr.responseText);
+				demo2_1.innerHTML = "<h3>" + obj.name + ", " + obj.age
+						+ "</h3>";
+			}
+			xhr.open('GET', 'req2_1');
+			xhr.send();
+		}
+
+		const demo2_2 = document.getElementById('demo2_2');
+		function getUserData2() {
+			const xhr = new XMLHttpRequest();
+			xhr.onload = function() {
+				const obj = JSON.parse(xhr.responseText);
+				demo2_2.innerHTML = "<h3>" + obj.name + ", " + obj.age
+						+ "</h3>";
+			}
+			xhr.open('GET', 'req2_2');
+			xhr.send();
+		}
+
+		const demo3 = document.getElementById('demo3');
+		function sendParameter() {
+			const xhr = new XMLHttpRequest();
+			xhr.onload = function() {
+				demo3.innerHTML = xhr.responseText;
+			}
+			xhr.open('GET', 'req3?param=aaa');
+			xhr.send();
+		}
+
+		const demo4 = document.getElementById('demo4');
+		function sendParameter2() {
+			const xhr = new XMLHttpRequest();
+			xhr.onload = function() {
+				demo4.innerHTML = xhr.responseText;
+			}
+			xhr.open('GET', 'req4/Jane/33');
+			xhr.send();
+		}
+
+		const demo5 = document.getElementById('demo5');
+		function sendParameter3() {
+			const xhr = new XMLHttpRequest();
+			xhr.onload = function() {
+				demo5.innerHTML = xhr.responseText;
+			}
+			xhr.open('GET', 'req5');
+			xhr.send();
+		}
+		
+		const demo6 = document.getElementById('demo6');
+		function regData() {
+			const xhr = new XMLHttpRequest();
+			xhr.onload = function() {
+				demo6.innerHTML = xhr.responseText;
+			}
+			xhr.open('POST', 'req6');
+			xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			xhr.send('name=Jackson&age=29');
+		}
+	</script>
+</body>
+</html>

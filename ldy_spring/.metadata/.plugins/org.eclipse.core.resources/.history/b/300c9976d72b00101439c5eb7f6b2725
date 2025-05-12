@@ -1,0 +1,21 @@
+package com.example.demo.controller;
+
+import com.example.demo.json.ApiExplorer;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@Controller
+public class CultureController {
+
+    @GetMapping("/")
+    public String index(Model model) {
+        try {
+            String jsonResponse = ApiExplorer.getJsonResponse();
+            model.addAttribute("jsonData", jsonResponse);
+        } catch (Exception e) {
+            model.addAttribute("jsonData", "에러 발생: " + e.getMessage());
+        }
+        return "index";  // index.jsp로 이동
+    }
+}

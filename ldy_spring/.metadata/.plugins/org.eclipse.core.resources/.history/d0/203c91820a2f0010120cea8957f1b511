@@ -1,0 +1,135 @@
+package com.example.demo.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.example.demo.dao.IMemberDAO;
+import com.example.demo.dto.MemberDTO;
+import com.example.demo.dto.BoardDTO;
+import com.example.demo.dto.Comments;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
+@Controller
+public class memberController {
+
+	@Autowired
+	private IMemberDAO imemberDao;
+
+	@RequestMapping("/")
+	public String root() {
+		System.out.println("root.....");
+
+		return "index";
+	}
+
+	@GetMapping("/signup")
+	public String signup() {
+		System.out.println("signup.....");
+
+		return "signup";
+
+	}
+
+	@PostMapping("/regist")
+	public String regist(MemberDTO member) {
+		imemberDao.insert(member);
+
+		return "login";
+
+	}
+
+	@GetMapping("/login")
+	public String login() {
+		System.out.println("login.....");
+
+		return "login";
+	}
+
+	@GetMapping("/signin")
+	public String signin(HttpServletRequest request, Model model) {
+		String id = request.getParameter("id");
+		String pw = request.getParameter("pw");
+
+		MemberDTO member = imemberDao.login(id, pw);
+
+		if (member != null) {
+			HttpSession session = request.getSession();
+
+			session.setAttribute("login", member);
+
+		}
+
+		// 회원 정보
+		model.addAttribute("member", member);
+
+		// 게시글 정보
+		List<BoardDTO> list = imemberDao.getList();
+		model.addAttribute("list", list);
+
+		// 게시글 수 추가
+		int count = imemberDao.count();
+		model.addAttribute("count", count);
+
+		return "boardList";
+	}
+
+	@GetMapping("/logout")
+	public String logout(HttpServletRequest request) {
+		HttpSession session = request.getSession(false);
+		if (session != null) {
+			session.invalidate();
+		}
+		return "redirect:/login";
+	}
+
+	@GetMapping("/delete/{bno}")
+	public String delete(@PathVariable("bno") String bno) {
+		imemberDao.delete(bno);
+
+		return "boardList";
+	}
+
+	@GetMapping("/comments/{bno}")
+	public String comments(Comments cmt, @PathVariable("bno") String bno) {
+
+		imemberDao.cmtinsert(cmt);
+
+		return "comments";
+	}
+
+	@GetMapping("/test-insert")
+	@ResponseBody
+	public String testInsertBoards() {
+		for (int i = 1; i <= 100; i++) {
+			BoardDTO board = new BoardDTO();
+			board.setBno(i + 10); // 충돌 방지
+			board.setWriter("aa");
+			board.setTitle("임시 제목 " + i);
+			board.setContent("임시 내용 " + i);
+			imemberDao.boardinsert(board);
+		}
+		return "100개 게시글이 삽입되었습니다.";
+	}
+
+	@GetMapping("/pagenation/{i}")
+	public String pagenation(@PathVariable("i") int i, Model model) {
+
+		List<BoardDTO> list = imemberDao.getList2((i*10-9),(i*10));
+		model.addAttribute("list", list);
+
+		return "list";
+
+	}
+
+}

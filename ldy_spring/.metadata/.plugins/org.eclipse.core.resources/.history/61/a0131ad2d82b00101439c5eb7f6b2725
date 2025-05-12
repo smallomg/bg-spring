@@ -1,0 +1,50 @@
+package com.example.demo.controller;
+
+import com.example.demo.dto.GyeongnamCultureListResponseDTO;
+import com.example.demo.json.ApiExplorer;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.List;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@Controller
+public class CultureController {
+
+    @GetMapping("/gyeongnam-list")
+    public String getCultureList(Model model) {
+        try {
+            String jsonResponse = ApiExplorer.getJsonResponse();
+            System.out.println("API JSON Response: " + jsonResponse);
+
+            // JSON → DTO 변환
+            ObjectMapper objectMapper = new ObjectMapper();
+            GyeongnamCultureListResponseDTO responseDTO = objectMapper.readValue(
+                jsonResponse, GyeongnamCultureListResponseDTO.class
+            );
+
+            if (responseDTO != null &&
+                responseDTO.getGyeongnamculturallist() != null &&
+                responseDTO.getGyeongnamculturallist().getBody() != null &&
+                responseDTO.getGyeongnamculturallist().getBody().getItems() != null) {
+
+                List<GyeongnamCultureListResponseDTO.Item> itemList =
+                    responseDTO.getGyeongnamculturallist().getBody().getItems().getItem();
+
+                System.out.println("Parsed Item List Size: " + itemList.size());
+                model.addAttribute("items", itemList);
+            } else {
+                model.addAttribute("error", "API 응답에 데이터가 없습니다.");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("error", "API 호출 또는 파싱 오류: " + e.getMessage());
+        }
+
+        return "index";
+    }
+}
+

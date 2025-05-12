@@ -1,0 +1,164 @@
+package com.example.demo.json;
+
+// 1. 필요한 라이브러리 불러오기
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+// BufferedReader, InputStreamReader는 서버에서 받은 내용을 줄 단위로 읽기 위해 쓰입니다.
+
+import java.net.HttpURLConnection;
+import java.net.URL;
+// 인터넷에 연결해서 데이터를 가져오려면 URL, HttpURLConnection 같은 네트워크 관련 클래스가 필요해요.
+
+// URLEncoder는 URL에 붙이는 값을 특수문자 없이 인코딩해주기 위해 사용됩니다.
+import java.net.URLEncoder;
+
+// 2. 클래스 선언
+public class ApiExplorer {
+	
+	// 3. 메서드 선언 return
+    public static String getJsonResponse() throws Exception {
+    	// 4. 요청할 URL 준비
+    	// API 기본 주소를 StringBuilder로 시작합니다.
+    	// StringBuilder는 문자열을 효율적으로 연결할 때 쓰는 클래스예요.
+        StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/6480000/gyeongnamcultural/gyeongnamculturallist");
+        // serviceKey: 서비스 인증용 키.
+        urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=" + "XyczoMkmgGUArIQjaYCLOd3k1ULL6ERcXleEHaIvIxXlQlQwY512FSK5HopseZ5T6vYYhOHUKhiM6%2BUDCqvMog%3D%3D");
+        // pageNo: 페이지 번호 (1페이지).
+        urlBuilder.append("&" + URLEncoder.encode("pageNo", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8"));
+        // numOfRows: 한 번에 가져올 항목 수 (10개).
+        urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + URLEncoder.encode("10", "UTF-8"));
+        // resultType: JSON 형식으로 요청.
+        urlBuilder.append("&" + URLEncoder.encode("resultType", "UTF-8") + "=" + URLEncoder.encode("json", "UTF-8"));
+        // URLEncoder.encode() → 혹시 값에 한글이나 특수문자가 있으면 깨지지 않게 안전하게 변환.
+        
+        // 5. URL 객체 & 연결 열기
+        URL url = new URL(urlBuilder.toString());
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        // 완성된 URL 문자열을 URL 객체로 만들고, 그 URL로 HTTP 연결을 엽니다.
+
+        // 6. 요청 방식 & 헤더 설정
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Content-type", "application/json");
+        // GET: 자료만 요청. Content-type: 우리는 JSON 데이터를 받을 거라고 서버에 알림.
+        
+        // 7. 응답 읽기 준비
+        BufferedReader rd;
+        if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        } else {
+            rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+        }
+        // 서버가 200~300 상태코드면 성공 → 정상 데이터 읽기.
+        // 아니면 실패 → 에러 내용 읽기.
+        // BufferedReader로 읽는 이유? → 데이터를 한 줄씩 차례로 읽어오기 위해.
+        
+        // 8. 응답 데이터 한 줄씩 읽어 모으기
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = rd.readLine()) != null) {
+            sb.append(line);
+        }
+        // 서버에서 받은 데이터는 여러 줄로 나눠져 있을 수 있음.
+        // 한 줄씩 읽어서 sb에 계속 붙여서 하나의 완성된 문자열로 만듦.
+
+        //  9. 연결 종료
+        rd.close();
+        conn.disconnect();
+        // BufferedReader를 닫고,
+        // 서버와의 연결을 끊습니다.
+        
+        // 10. 최종 결과 반환
+        return sb.toString();  // 여기서 JSON 문자열을 리턴함
+    }
+    public static String getJsonResponse2() throws Exception {
+    	// 4. 요청할 URL 준비
+    	// API 기본 주소를 StringBuilder로 시작합니다.
+    	// StringBuilder는 문자열을 효율적으로 연결할 때 쓰는 클래스예요.
+        StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/6480000/gyeongnamcultural/gyeongnamculturallist");
+        // serviceKey: 서비스 인증용 키.
+        urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=" + "XyczoMkmgGUArIQjaYCLOd3k1ULL6ERcXleEHaIvIxXlQlQwY512FSK5HopseZ5T6vYYhOHUKhiM6%2BUDCqvMog%3D%3D");
+        // pageNo: 페이지 번호 (1페이지).
+        urlBuilder.append("&" + URLEncoder.encode("pageNo", "UTF-8") + "=" + URLEncoder.encode("2", "UTF-8"));
+        // numOfRows: 한 번에 가져올 항목 수 (10개).
+        urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + URLEncoder.encode("5", "UTF-8"));
+        // resultType: JSON 형식으로 요청.
+        urlBuilder.append("&" + URLEncoder.encode("resultType", "UTF-8") + "=" + URLEncoder.encode("json", "UTF-8"));
+        // URLEncoder.encode() → 혹시 값에 한글이나 특수문자가 있으면 깨지지 않게 안전하게 변환.
+        
+        // 5. URL 객체 & 연결 열기
+        URL url = new URL(urlBuilder.toString());
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        // 완성된 URL 문자열을 URL 객체로 만들고, 그 URL로 HTTP 연결을 엽니다.
+
+        // 6. 요청 방식 & 헤더 설정
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Content-type", "application/json");
+        // GET: 자료만 요청. Content-type: 우리는 JSON 데이터를 받을 거라고 서버에 알림.
+        
+        // 7. 응답 읽기 준비
+        BufferedReader rd;
+        if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        } else {
+            rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+        }
+        // 서버가 200~300 상태코드면 성공 → 정상 데이터 읽기.
+        // 아니면 실패 → 에러 내용 읽기.
+        // BufferedReader로 읽는 이유? → 데이터를 한 줄씩 차례로 읽어오기 위해.
+        
+        // 8. 응답 데이터 한 줄씩 읽어 모으기
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = rd.readLine()) != null) {
+            sb.append(line);
+        }
+        // 서버에서 받은 데이터는 여러 줄로 나눠져 있을 수 있음.
+        // 한 줄씩 읽어서 sb에 계속 붙여서 하나의 완성된 문자열로 만듦.
+
+        //  9. 연결 종료
+        rd.close();
+        conn.disconnect();
+        // BufferedReader를 닫고,
+        // 서버와의 연결을 끊습니다.
+        
+        // 10. 최종 결과 반환
+        return sb.toString();  // 여기서 JSON 문자열을 리턴함
+    }
+}
+
+// 원래 코드
+//import java.io.InputStreamReader;
+//import java.net.HttpURLConnection;
+//import java.net.URL;
+//import java.net.URLEncoder;
+//import java.io.BufferedReader;
+//import java.io.IOException;
+//
+//public class ApiExplorer {
+//    public static void main(String[] args) throws IOException {
+//        StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/6480000/gyeongnamcultural/gyeongnamculturallist"); /*URL*/
+//        urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=서비스키"); /*Service Key*/
+//        urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지번호*/
+//        urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("10", "UTF-8")); /*한 페이지 결과 수*/
+//        urlBuilder.append("&" + URLEncoder.encode("resultType","UTF-8") + "=" + URLEncoder.encode("json", "UTF-8")); /*JSON방식으로 호출 시 파라미터 resultType=json 입력*/
+//        URL url = new URL(urlBuilder.toString());
+//        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+//        conn.setRequestMethod("GET");
+//        conn.setRequestProperty("Content-type", "application/json");
+//        System.out.println("Response code: " + conn.getResponseCode());
+//        BufferedReader rd;
+//        if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+//            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+//        } else {
+//            rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+//        }
+//        StringBuilder sb = new StringBuilder();
+//        String line;
+//        while ((line = rd.readLine()) != null) {
+//            sb.append(line);
+//        }
+//        rd.close();
+//        conn.disconnect();
+//        System.out.println(sb.toString());
+//    }
+//}

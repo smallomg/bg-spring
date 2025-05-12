@@ -1,0 +1,31 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>경남 문화재 목록</title>
+</head>
+<body>
+<h1>경남 문화재 목록</h1>
+
+<table border="1">
+    <tr>
+        <th>제목</th>
+        <th>한문</th>
+        <th>내용</th>
+        <th>주소</th>
+        <th>이미지</th>
+    </tr>
+    <c:forEach var="item" items="${items}">
+        <tr>
+            <td>${item.MYONGCHING}</td>
+            <td>${item.MYONGCHING_HANMUN}</td>
+            <td>${item.CONTENT}</td>
+            <td>${item.ADDRESS1}</td>
+            <td>
+                <img src="${item.fileurl1}" width="100" alt="${item.MYONGCHING} 이미지">
+            </td>
+        </tr>
+    </c:forEach>
+</table>
+
+</body>
+</html>

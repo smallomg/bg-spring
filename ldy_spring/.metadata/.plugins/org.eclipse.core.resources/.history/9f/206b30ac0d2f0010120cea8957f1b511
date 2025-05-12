@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.IMemberDAO">
+
+	<insert id="insert">
+		INSERT INTO tbl_member (id, pw, name, phone, grade)
+		VALUES (#{id}, #{pw}, #{name}, #{phone}, #{grade})
+	</insert>
+
+	<select id="login" resultType="com.example.demo.dto.MemberDTO">
+		SELECT * FROM tbl_member WHERE id=#{id}AND pw=#{pw}
+	</select>
+
+
+	<select id="getList" resultType="com.example.demo.dto.BoardDTO">
+		SELECT * FROM board
+	</select>
+
+	<delete id="delete">
+		DELETE FROM board WHERE bno=#{bno}
+	</delete>
+	
+	<insert id="cmtinsert">
+		INSERT INTO comments (no, bno, content)
+		VALUES (#{no}, #{bno}, #{content)
+	</insert>
+	
+	<insert id="boardinsert">
+  INSERT INTO board (bno, writer, title, content)
+  VALUES (#{board.bno}, #{board.writer}, #{board.title}, #{board.content})
+</insert>
+
+	<select id="count" resultType="int">
+		SELECT COUNT(*) FROM board
+	</select>
+	
+	<select id="getList2" resultType="com.example.demo.dto.BoardDTO">
+		SELECT * FROM (SELECT ROWNUM rn, b.* FROM board b WHERE rn BETWEEN #{f} AND #{l};
+	</select>
+	
+	
+	
+</mapper>

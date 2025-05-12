@@ -1,0 +1,31 @@
+package com.example.demo.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.dto.MemberDTO;
+
+@RestController
+public class MemberController {
+
+	@RequestMapping("/instance")
+	public MemberDTO instance() {
+		System.out.println("객체 반환 메소드");
+		MemberDTO dto = new MemberDTO();
+		
+		return dto;
+		
+	}
+	
+	@RequestMapping("/list")
+	public List<MemberDTO> list() {
+		System.out.println("리스트 반환  메소드");
+		List<MemberDTO> list = new ArrayList<MemberDTO>();
+		
+		return list;
+		
+	}
+}

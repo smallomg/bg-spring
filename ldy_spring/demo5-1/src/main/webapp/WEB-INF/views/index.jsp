@@ -1,0 +1,30 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<link rel="stylesheet" href="/css/style.css">
+<script src="/js/javascript1.js"></script>
+
+
+<body>
+	<jsp:include page="fragments/header.jsp"></jsp:include>
+	<h1>Index Page</h1>
+
+
+
+	<img src="/images/bnk_logo1.png" alt="a">
+
+	<jsp:include page="fragments/footer.jsp"></jsp:include>
+
+	<script>
+/* setTimeout(()=>{
+	location.href="/p1";
+	
+},2000) */
+</script>
+</body>
+</html>

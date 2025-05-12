@@ -1,0 +1,40 @@
+package com.example.demo.controller;
+
+import com.example.demo.dto.GyeongnamCultureListResponseDTO;
+import com.example.demo.dto.GyeongnamCultureListResponseDTO.Item;
+import com.example.demo.json.ApiExplorer;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.List;
+
+@Controller
+public class CultureController {
+
+    @GetMapping("/index")
+    public String getCultureList(Model model) {
+        try {
+            String jsonResponse = ApiExplorer.getJsonResponse();
+
+            ObjectMapper mapper = new ObjectMapper();
+            GyeongnamCultureListResponseDTO responseDTO =
+                    mapper.readValue(jsonResponse, GyeongnamCultureListResponseDTO.class);
+
+            List<Item> itemList =
+                    responseDTO.getGyeongnamculturallist()
+                               .getBody()
+                               .getItems()
+                               .getItem();
+         
+            model.addAttribute("itemList", itemList);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("errorMsg", "API 호출 또는 데이터 파싱 중 오류가 발생했습니다.");
+        }
+
+        return "index";  // culture.jsp로 이동
+    }
+}

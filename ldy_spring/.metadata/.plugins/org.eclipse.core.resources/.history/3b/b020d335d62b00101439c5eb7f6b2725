@@ -1,0 +1,24 @@
+package com.example.demo.controller;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import com.example.demo.dto.GyeongnamCultureListResponseDTO;
+import com.example.demo.json.ApiExplorer;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+@Controller
+public class CultureController {
+
+    @GetMapping("/cultural-list")
+    public String getCulturalList(Model model) throws Exception {
+        String json = ApiExplorer.getJsonResponse();  // ApiExplorer에서 JSON 문자열 가져오기
+
+        ObjectMapper mapper = new ObjectMapper();
+        GyeongnamCultureListResponseDTO response = mapper.readValue(json, GyeongnamCultureListResponseDTO.class);
+
+        model.addAttribute("items", response.getGyeongnamculturallist().getBody().getItems().getItem());
+
+        return "index";  // culturalList.jsp로 이동
+    }
+}

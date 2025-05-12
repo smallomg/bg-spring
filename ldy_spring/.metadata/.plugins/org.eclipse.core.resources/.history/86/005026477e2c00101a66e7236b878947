@@ -1,0 +1,22 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>회원등록 폼 페이지 regMemberForm</h1>
+
+	<form action="regist" method="POST">
+		ID : <input type="text" name="id">
+		PW : <input type="text" name="PW">
+		NAME : <input type="text" name="name">
+		PHONE : <input type="text" name="phone">
+		GRADE : <input type="text" name="grade">
+		<input type="submit" value="등록">
+	</form>
+
+</body>
+</html>

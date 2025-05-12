@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
+	<item key="hasShownOverlayPopupBefore" value="true"/>
 	<section name="java.lang.Class">
 		<item key="selection" value="plugins {"/>
+		<item key="replaceBarOpen" value="false"/>
 		<list key="findhistory">
+			<item value="getmember"/>
+			<item value="itemList"/>
+			<item value="URLEncoder"/>
+			<item value="PathVariable "/>
 			<item value="plugins {"/>
 		</list>
 	</section>

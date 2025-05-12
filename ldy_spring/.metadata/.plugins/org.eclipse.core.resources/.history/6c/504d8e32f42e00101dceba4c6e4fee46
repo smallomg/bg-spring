@@ -1,0 +1,33 @@
+package com.example.demo.dao;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import com.example.demo.dto.BoardDTO;
+
+@SpringBootTest
+class BoardDaoTest {
+
+	@Autowired
+	IMemberDAO boardDao;
+
+	// 전문적으로 테스트만 하는 클래스
+	// @Test 없으면 안됨
+	@Test
+	void test() {
+		for (int i = 0; i < 100; i++) {
+			BoardDTO board = new BoardDTO();
+			board.setBno((11 + i));
+			board.setWriter("aa");
+			board.setTitle("Title" + (i));
+			board.setContent("Content" + (i));
+			boardDao.cominsert(board);
+			
+		}
+
+	}
+
+}
