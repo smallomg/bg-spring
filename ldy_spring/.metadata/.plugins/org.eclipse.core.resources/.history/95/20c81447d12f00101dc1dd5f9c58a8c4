@@ -1,0 +1,31 @@
+package com.example.demo.dao;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import com.example.demo.dto.MemberDTO;
+import com.example.demo.dto.ReviewDTO;
+
+@Mapper
+public interface IMemberDao {
+	
+	// 회원가입 등록
+	int signup(MemberDTO member);
+	
+	// 아이디 중복 체크
+	int idcheck(@Param("id") String id);
+	
+	// 회원 로그인 처리
+	MemberDTO login(@Param("id") String id,@Param("pw") String pw);
+	
+	// 앞으로 나올 영화 별점
+	List<ReviewDTO> getReviewListByMovie(int mno);
+	
+	// 이미 지난 영화 제목 내용
+	void insertTitleContent(ReviewDTO review);
+	
+	int getNextRno();
+
+}

@@ -1,0 +1,9 @@
+spring.application.name=demo7
+
+server.port=8092
+
+#jsp
+spring.mvc.view.prefix=/WEB-INF/views/
+spring.mvc.view.suffix=.jsp
+
+server.servlet.session.timeout=1m

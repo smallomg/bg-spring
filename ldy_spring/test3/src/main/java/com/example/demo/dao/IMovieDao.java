@@ -1,0 +1,23 @@
+package com.example.demo.dao;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+
+import com.example.demo.dto.MovieDTO;
+
+
+@Mapper
+public interface IMovieDao {
+
+	// 영화 게시글 목록
+	List<MovieDTO> getList();
+	
+	// 상영 예정 영화 게시글 목록
+	List<MovieDTO> upmovielist();
+	
+	// 상영 종료 영화 게시글 목록
+	List<MovieDTO> downmovielist();
+	
+	
+}

@@ -1,0 +1,17 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>index page</h1>
+	<a href="signin">로그인</a><br>
+	<a href="signup">회원가입</a><br>
+	<hr>
+	<a href="admin">관리자로 로그인</a>
+	
+</body>
+</html>

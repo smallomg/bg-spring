@@ -1,0 +1,92 @@
+<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<h1>상영 예정작 영화</h1>
+
+<h2>좌석 예약</h2>
+<form action="/seat/reserve" method="post">
+    <input type="hidden" name="mno" value="${mno}" />
+    
+    <c:forEach var="seat" items="${seats}" varStatus="status">
+        <label style="display: inline-block; width: 80px;">
+
+            <c:choose>
+                <!-- 1. 예약된 좌석일 경우 -->
+                <c:when test="${seat.reserved}">
+                    <!-- 1-1. 내가 예약한 좌석이면 취소 버튼 -->
+                    <c:if test="${seat.id == sessionScope.member.id}">
+                        <form action="/seat/cancel" method="post" style="display:inline;">
+                            <input type="hidden" name="seatId" value="${seat.seatId}" />
+                            <input type="hidden" name="mno" value="${mno}" />
+                            <button type="submit">[${seat.seatNumber}]취소</button>
+                        </form>
+                    </c:if>
+
+                    <!-- 1-2. 다른 사람이 예약한 좌석이면 비활성화 표시 -->
+                    <c:if test="${seat.id != sessionScope.member.id}">
+                        <span style="color:gray;">[${seat.seatNumber}]</span>
+                    </c:if>
+                </c:when>
+
+                <!-- 2. 예약되지 않은 좌석일 경우 -->
+                <c:otherwise>
+                    <input type="checkbox" name="seatIds" value="${seat.seatId}" />
+                    ${seat.seatNumber}
+                </c:otherwise>
+            </c:choose>
+
+        </label>
+
+        <!-- 5개마다 줄바꿈 -->
+        <c:if test="${status.index % 5 == 4}"><br /></c:if>
+    </c:forEach>
+    
+    <br><br>
+    <input type="submit" value="예약하기" />
+</form>
+
+
+
+<h2>영화 기대평 작성</h2>
+
+<form action="/review/scoreInsert" method="post">
+	<input type="hidden" name="mno" value="${mno}" /> <label>별점:</label> <select
+		name="score">
+		<option value="">선택</option>
+		<option value="1">★☆☆☆☆</option>
+		<option value="2">★★☆☆☆</option>
+		<option value="3">★★★☆☆</option>
+		<option value="4">★★★★☆</option>
+		<option value="5">★★★★★</option>
+	</select><br> <input type="submit" value="리뷰 등록">
+</form>
+
+<hr>
+
+<h3>상영 예정인 영화 기대평</h3>
+<c:if test="${empty reviews}">
+	<p>등록된 기대평이 없습니다.</p>
+</c:if>
+
+<table border="1" width="100%" cellpadding="5">
+	<tr>
+		<th>작성자</th>
+		<th>별점</th>
+
+	</tr>
+	<c:forEach var="r" items="${reviews}">
+		<tr>
+			<td>${r.id}</td>
+			<td><c:choose>
+					<c:when test="${r.score == 1}">★☆☆☆☆</c:when>
+					<c:when test="${r.score == 2}">★★☆☆☆</c:when>
+					<c:when test="${r.score == 3}">★★★☆☆</c:when>
+					<c:when test="${r.score == 4}">★★★★☆</c:when>
+					<c:when test="${r.score == 5}">★★★★★</c:when>
+					<c:otherwise>선택 안함</c:otherwise>
+				</c:choose></td>
+		</tr>
+	</c:forEach>
+</table>
+
+<script>
+	

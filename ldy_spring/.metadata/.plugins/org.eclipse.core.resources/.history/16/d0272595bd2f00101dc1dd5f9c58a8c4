@@ -1,0 +1,86 @@
+package com.example.demo.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import com.example.demo.dao.IAdminDao;
+import com.example.demo.dao.IMovieDao;
+import com.example.demo.dto.AdminDTO;
+import com.example.demo.dto.MovieDTO;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
+@Controller
+public class AdminController {
+	
+	@Autowired
+	private IAdminDao iadminDao;
+	
+	@Autowired
+	private IMovieDao imovieDao;
+
+	// 관리자 로그인 페이지 이동
+	@GetMapping("/admin")
+	public String admin() {
+		System.out.println("admin login...");
+		return "admin_login";
+	}
+	
+	// 관리자 로그인 처리
+	@GetMapping("/admin_login")
+	public String adminlogin(HttpServletRequest request) {
+		String id = request.getParameter("id");
+		String pw = request.getParameter("pw");
+		
+		AdminDTO admin = iadminDao.login(id, pw);
+		
+		if (admin != null) {
+			HttpSession session = request.getSession();
+
+			session.setAttribute("admin", admin);
+			session.removeAttribute("member"); // 회원 속성 제거
+			
+			System.out.println("관리자 로그인");
+			return "redirect:/main";
+		} else {
+			System.out.println("로그인 실패");
+			return "index";
+		}
+		
+	}
+	
+	// 로그아웃 처리
+		@GetMapping("/admin_logout")
+		public String logout(HttpServletRequest request) {
+		    HttpSession session = request.getSession(false); 
+		    if (session != null) {
+		        session.invalidate();
+		    }
+		    System.out.println("로그아웃 하였습니다");
+		    return "index";
+		}
+		
+		
+		// main 페이지 화면 지금 목록 보이게 함
+		@GetMapping("/main")
+		public String main(Model model) {
+		    model.addAttribute("movies", imovieDao.getList());
+		    return "main";
+		}
+		
+		// 영화 등록 처리
+		@PostMapping("/movieInsert")
+		public String movieinsert(MovieDTO movie) {
+			iadminDao
+			
+			return "redirect:/main";
+			
+		}
+	
+}

@@ -1,0 +1,10 @@
+package com.example.demo.dto;
+
+public class Notice {
+
+	private int nno;
+	private String id;
+	private String title;
+	private String content;
+	
+}

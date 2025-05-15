@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.IMemberDao">
+
+	<!-- 회원가입 등록 -->
+	<insert id="signup">
+		INSERT INTO tbl_member (id, pw, name, phone, grade)
+		VALUES (#{id}, #{pw}, #{name}, #{phone}, #{grade})
+	</insert>
+
+	<!--아이디 중복체크 -->
+	<select id="idcheck">
+		SELECT COUNT(*) FROM tbl_member WHERE id = #{id}
+	</select>
+
+	<!--회원 로그인 처리 -->
+	<select id="login">
+		SELECT * FROM tbl_member WHERE id=#{id}AND pw=#{pw}
+	</select>
+
+	<!--회원 : 상영 예정인 영화 처리 -->
+	<insert id="scroeinsert"
+		parameterType="com.example.demo.dto.ReviewDTO">
+		INSERT INTO review (
+		rno, score, id, mno
+		)
+		VALUES (
+		review_seq.NEXTVAL,
+
+		#{score, jdbcType=NUMERIC},
+		#{id, jdbcType=VARCHAR},
+		#{mno, jdbcType=NUMERIC}
+		)
+	</insert>
+
+	<!-- 회원 : 상영 예정,종료 영화 별점, 제목내용 목록 -->
+	<select id="getReviewList"
+		resultType="com.example.demo.dto.ReviewDTO">
+		SELECT rno, title, content, score, id, mno
+		FROM review
+		WHERE
+		mno = #{mno}
+		ORDER BY rno DESC
+	</select>
+
+	<!--회원 : 상영 종료된 영화 처리 -->
+	<insert id="contentForm"
+		parameterType="com.example.demo.dto.ReviewDTO">
+		INSERT INTO review (
+		rno, title, content, id, mno
+		)
+		VALUES
+		(
+		review_seq.NEXTVAL,
+		#{title, jdbcType=VARCHAR},
+		#{content,
+		jdbcType=VARCHAR},
+
+		#{id, jdbcType=VARCHAR},
+		#{mno, jdbcType=NUMERIC}
+		)
+	</insert>
+
+	<select id="getSeatList"
+		resultType="com.example.demo.dto.SeatDTO">
+		SELECT * FROM seat ORDER BY sno
+
+	</select>
+
+	<select id="findBySeatNumber"
+		resultType="com.example.demo.dto.SeatDTO">
+		SELECT * FROM seat WHERE seatNumber = #{seatNumber}
+	</select>
+
+	<update id="updateSeat">
+		UPDATE seat
+		SET result = #{result},
+		id = #{id},
+		mno = #{mno}
+		WHERE seatNumber = #{seatNumber}
+	</update>
+	<select id="getSeatsByMovie"
+		resultType="com.example.demo.dto.SeatDTO">
+		SELECT * FROM seat
+		WHERE mno = #{mno}
+		ORDER BY sno
+	</select>
+
+</mapper>
+
+	
+

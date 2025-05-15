@@ -1,0 +1,52 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+	<h1>Index Page</h1>
+	<hr>
+	<button onclick="run()">실행(GET)</button>
+	<div id="demo">-------</div>
+
+	<hr>
+	<button onclick="run2()">실행(POST)</button>
+	<div id="demo">-------</div>
+
+
+
+
+	<script>
+	function run2(){
+		//POST 방식 요청
+		axios.get('/api/user',{
+			name : 'james Dean',
+			id : 'JD'
+		})
+		.then(response => {
+			document.getElementById('demo').innerHTML = response.data;
+			
+		})
+		.catch(error=>{
+			document.getElementById('demo').innerHTML = error;
+		});
+	}
+	
+		function run(){
+			//GET 방식 요청
+			axios.get('/api/user/1')
+			.then(response => {
+				document.getElementById('demo').innerHTML = response.data;
+				
+			})
+			.catch(error=>{
+				document.getElementById('demo').innerHTML = error;
+			});
+		}
+	</script>
+</body>
+</html>

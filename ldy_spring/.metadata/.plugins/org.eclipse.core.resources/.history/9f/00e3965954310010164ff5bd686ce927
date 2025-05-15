@@ -1,0 +1,75 @@
+package com.example.demo.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.example.demo.dto.UserDTO;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
+@Controller
+public class MyController {
+
+	@RequestMapping("/")
+	public String root() {
+		return "index";
+	}
+
+	@GetMapping("/sessionTest")
+	public String sessionTest(HttpServletRequest request , RedirectAttributes rttr) {
+		HttpSession session = request.getSession();
+		UserDTO user = (UserDTO) session.getAttribute("user");
+
+		if (user != null) {
+			
+			return "sessionTest";
+		}
+
+		else {
+			rttr.addFlashAttribute("errorMsg" ,"회원전용페이지입니다 로그인하세요");
+			return "redirect:/loginForm";
+		}
+	}
+
+	@GetMapping("/login")
+	public String login() {
+		return "loginForm";
+	}
+
+	// 로그아웃 처리
+	@GetMapping("/logout")
+	public String logout(HttpServletRequest request) {
+		HttpSession session = request.getSession(false);
+		if (session != null) {
+			session.invalidate();
+		}
+		System.out.println("로그아웃 하였습니다");
+		return "loginForm";
+	}
+
+	@PostMapping("/Login")
+	public String Login(@RequestParam("id") String id, @RequestParam("pw") String pw, HttpServletRequest request,RedirectAttributes rttr) {
+		HttpSession session = request.getSession();
+		UserDTO user = new UserDTO();
+
+		user.setId(id);
+		user.setPw(pw);
+
+		String uid = "aa";
+		String upw = "12";
+		
+		if (uid.equals(id) && upw.equals(pw)) {
+			session.setAttribute("user", user);
+			return "sessionTest";
+		} else {
+			 rttr.addFlashAttribute("msg", "아이디 또는 비밀번호가 틀렸습니다.");
+			return "loginForm";
+		}
+	}
+
+}

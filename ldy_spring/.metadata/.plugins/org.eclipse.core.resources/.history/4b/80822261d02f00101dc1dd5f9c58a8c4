@@ -1,0 +1,46 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h2>상영 종료 영화</h2>
+
+<h2>후기 목록</h2>
+<c:choose>
+    <c:when test="${empty reviewList}">
+        <p>아직 작성된 후기가 없습니다.</p>
+    </c:when>
+    <c:otherwise>
+        <ul>
+            <c:forEach var="r" items="${reviewList}">
+                <li>
+                    <strong>${r.id}</strong> 님<br>
+                    <strong>${r.title}</strong><br>
+                    ${r.content}
+                    <hr>
+                </li>
+            </c:forEach>
+        </ul>
+    </c:otherwise>
+</c:choose>
+
+
+<h2>후기 작성</h2>
+<form action="/review/contentInsert" method="post">
+    <input type="hidden" name="mno" value="${param.mno}">
+    <input type="hidden" name="id" value="${sessionScope.member.id}">
+
+    제목: <input type="text" name="title"><br>
+    내용: <textarea name="content"></textarea><br>
+
+    <input type="submit" value="리뷰 등록">
+</form>
+
+
+
+</body>
+</html>

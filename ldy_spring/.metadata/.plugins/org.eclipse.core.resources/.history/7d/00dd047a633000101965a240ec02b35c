@@ -1,0 +1,96 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+	<h1>Index Page</h1>
+	<hr>
+	<button onclick="run()">실행(GET)</button>
+	<div id="demo">-------</div>
+	<hr>
+	<button onclick="run1()">실행2(GET)</button>
+	<div id="demo1">-------</div>
+
+
+	<hr>
+	<button onclick="run2()">실행(POST)</button>
+	<div id="demo2">-------</div>
+
+	<hr>
+	<button onclick="run3()">실행2(POST)</button>
+	<div id="demo3">-------</div>
+
+
+
+
+	<script>
+	function run1(){
+		//GET 방식 요청
+		axios.get('/api/user1',{
+			params: {
+				id : 'hong',
+				name : 'Hong gil dong'
+			}
+		})
+		.then(response => {
+			document.getElementById('demo1').innerHTML = response.data;
+			
+		})
+		.catch(error=>{
+			document.getElementById('demo1').innerHTML = error;
+		});
+	}
+	
+	function run2(){
+		//POST 방식 요청
+		axios.post('/api/user2',{
+			name : 'james Dean',
+			id : 'JD'
+		})
+		.then(response => {
+			document.getElementById('demo2').innerHTML = response.data;
+			
+		})
+		.catch(error=>{
+			document.getElementById('demo2').innerHTML = error;
+		});
+	}
+	
+	function run3(){
+		//POST 방식 요청
+		const formData = new FormData();
+		formData.append('id','ddd');
+		formData.append('name','Dennis');
+		
+		axios.post('/api/user',formData,{
+			header:{
+				'Cointent-type':'multipart/form-data'
+			}
+		})
+		.then(response=>{
+			console.log('Post(Form)성공 :'+response.data)
+		})
+		.catch(error=>{
+			console.log('Post(Form)실패 :'+error)
+		})
+	}
+	
+		function run(){
+			//GET 방식 요청
+			axios.get('/api/user/1')
+			.then(response => {
+				document.getElementById('demo').innerHTML = response.data;
+				
+			})
+			.catch(error=>{
+				document.getElementById('demo').innerHTML = error;
+			});
+		}
+	</script>
+</body>
+</html>

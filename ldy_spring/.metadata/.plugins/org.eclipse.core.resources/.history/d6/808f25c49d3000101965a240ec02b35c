@@ -1,0 +1,136 @@
+package com.example.demo.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.example.demo.dao.IAdminDao;
+import com.example.demo.dao.IMovieDao;
+import com.example.demo.dto.AdminDTO;
+import com.example.demo.dto.MemberDTO;
+import com.example.demo.dto.MovieDTO;
+import com.example.demo.dto.NoticeDTO;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
+@Controller
+public class AdminController {
+	
+	@Autowired
+	private IAdminDao iadminDao;
+	
+	@Autowired
+	private IMovieDao imovieDao;
+
+	// 관리자 로그인 페이지 이동
+	@GetMapping("/admin")
+	public String admin() {
+		System.out.println("admin login...");
+		return "admin_login";
+	}
+	
+	// 관리자 로그인 처리
+	@GetMapping("/admin_login")
+	public String adminlogin(HttpServletRequest request) {
+		String id = request.getParameter("id");
+		String pw = request.getParameter("pw");
+		
+		AdminDTO admin = iadminDao.login(id, pw);
+		
+		if (admin != null) {
+			HttpSession session = request.getSession();
+
+			session.setAttribute("admin", admin);
+			session.removeAttribute("member"); // 회원 속성 제거
+			
+			System.out.println("관리자 로그인");
+			return "redirect:/main";
+		} else {
+			System.out.println("로그인 실패");
+			return "index";
+		}
+		
+	}
+	
+	// 로그아웃 처리
+		@GetMapping("/admin_logout")
+		public String logout(HttpServletRequest request) {
+		    HttpSession session = request.getSession(false); 
+		    if (session != null) {
+		        session.invalidate();
+		    }
+		    System.out.println("로그아웃 하였습니다");
+		    return "index";
+		}
+		
+		
+		// main 페이지 화면 지금 목록 보이게 함
+		@GetMapping("/main")
+		public String main(Model model) {
+		    model.addAttribute("movies", imovieDao.getList());
+		    List<MovieDTO> upcomingMovies = imovieDao.upmovielist();  // 상영 예정
+		    List<MovieDTO> downcomingMovies = imovieDao.downmovielist(); 
+		    
+		    // 공지사랑 목록 전체보기
+		    List<NoticeDTO> noticelist =  iadminDao.noticeList();
+		    model.addAttribute("noticelist", noticelist);
+		    
+		    // 상영 예정
+		    model.addAttribute("upcoming", upcomingMovies);
+		    model.addAttribute("downcoming", downcomingMovies);
+		    
+		    
+		    return "main";
+		}
+		
+		// 영화 등록 페이지 이동
+		@GetMapping("/movieinsertForm")
+		public String movieinsertForm() {
+			System.out.println("영화 등록 페이지 이동");
+			
+			return "movieinsertForm";
+			
+		}
+		
+		
+		// 영화 등록 처리
+		@PostMapping("/movieInsert")
+		public String movieinsert(MovieDTO movie) {
+			iadminDao.moviesinsert(movie);
+			
+			return "redirect:/main";
+			
+		}
+
+		// 영화 등록 페이지 이동
+		@GetMapping("/noticeinsertForm")
+		public String noticeinsertForm() {
+			System.out.println("공지사항 등록 페이지 이동");
+			
+			return "noticeinsertForm";
+			
+		}
+		
+		
+		@PostMapping("/noticeInsert")
+		public String noticeInsert(@RequestParam("title")String title,@RequestParam("content")String content,
+				HttpServletRequest request) {
+			NoticeDTO notice = new NoticeDTO();
+			HttpSession session = request.getSession();
+			AdminDTO admin = (AdminDTO) session.getAttribute("admin");
+			
+			notice.setNno(0);
+			notice.setId(admin.getId());
+			notice.setTitle(title);
+			notice.setContent(content);
+			
+			return "";
+		}
+	
+}

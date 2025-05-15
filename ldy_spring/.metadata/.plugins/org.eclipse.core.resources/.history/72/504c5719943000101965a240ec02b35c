@@ -1,0 +1,48 @@
+package com.example.demo.restcontroller;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import jakarta.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+public class GameController {
+
+    @PostMapping("/check-number")
+    public String checkNumber(@RequestBody Map<String, Object> payload, HttpSession session) {
+        String userId = (String) session.getAttribute("member"); // 로그인된 사용자 ID
+        if (userId == null) return "로그인 후 이용해주세요.";
+
+        int guess = Integer.parseInt(payload.get("guess").toString());
+
+        // 세션에 저장된 정답 숫자 없으면 생성
+        Integer answer = (Integer) session.getAttribute("answer");
+        if (answer == null) {
+            answer = (int)(Math.random() * 10 + 1);
+            session.setAttribute("answer", answer);
+        }
+
+        // 시도 횟수 Map
+        Map<String, Integer> tryMap = (Map<String, Integer>) session.getAttribute("tryMap");
+        if (tryMap == null) {
+            tryMap = new HashMap<>();
+            session.setAttribute("tryMap", tryMap);
+        }
+
+        int currentTry = tryMap.getOrDefault(userId, 0);
+        if (currentTry >= 3) {
+            return "❌ 시도 횟수를 모두 사용하셨습니다. (최대 3회)";
+        }
+
+        tryMap.put(userId, currentTry + 1);
+
+        if (guess == answer) {
+            session.removeAttribute("answer");         // 정답 리셋
+            tryMap.put(userId, 0);                      // 시도 횟수 초기화
+            return "🎉 정답입니다!";
+        } else {
+            return "❌ 틀렸습니다. 남은 시도 횟수: " + (2 - currentTry);
+        }
+    }
+}

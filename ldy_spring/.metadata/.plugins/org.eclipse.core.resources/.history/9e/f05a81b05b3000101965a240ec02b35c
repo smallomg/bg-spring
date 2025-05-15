@@ -1,0 +1,21 @@
+package com.example.demo.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import com.example.demo.dto.UserDTO;
+
+@Controller
+public class MyController {
+
+	@GetMapping("/")
+	public String root() {
+		System.out.println("root...");
+		
+		return "index";
+	}
+	
+	
+}

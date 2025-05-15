@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.IMemberDao">
+
+	<insert id="signup">
+		INSERT INTO tbl_member (id, pw, name, phone, grade)
+		VALUES (#{id}, #{pw}, #{name}, #{phone}, #{grade})
+	</insert>
+
+	<select id="idcheck">
+		SELECT COUNT(*) FROM tbl_member WHERE id = #{id}
+	</select>
+
+	<select id="login">
+		SELECT * FROM tbl_member WHERE id=#{id}AND pw=#{pw}
+	</select>
+
+	<insert id="scroeinsert"
+		parameterType="com.example.demo.dto.ReviewDTO">
+		INSERT INTO review (
+		rno, title, content, score, id, mno
+		)
+		VALUES (
+		review_seq.NEXTVAL,
+		#{title, jdbcType=VARCHAR},
+		#{content,
+		jdbcType=VARCHAR},
+		#{score, jdbcType=NUMERIC},
+		#{id, jdbcType=VARCHAR},
+		#{mno, jdbcType=NUMERIC}
+		)
+	</insert>
+
+	<select id="getReviewList"
+		resultType="com.example.demo.dto.ReviewDTO">
+		SELECT rno, title, content, score, id, mno
+		FROM review
+		WHERE mno = #{mno}
+		ORDER BY rno DESC
+	</select>
+
+
+</mapper>
+
+	
+

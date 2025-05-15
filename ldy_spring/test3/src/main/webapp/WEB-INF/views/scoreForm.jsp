@@ -1,0 +1,83 @@
+<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<h1>상영 예정작 영화</h1>
+
+<h2>좌석 예약</h2>
+<form action="/seat/reserve" method="post">
+	<input type="hidden" name="mno" value="${mno}" />
+	<c:set var="count" value="0" />
+	<c:forEach var="seat" items="${seats}" varStatus="status">
+		<label style="display: inline-block; width: 60px;"> 
+			<input type="checkbox" name="seatIds" value="${seat.seatId}"
+			<c:if test="${seat.reserved}">disabled</c:if> /> ${seat.seatNumber}
+		</label>
+
+		<c:set var="count" value="${count + 1}" />
+		<c:if test="${count % 5 == 0}">
+			<br />
+		</c:if>
+	</c:forEach>
+
+	<br> <br> <input type="submit" value="예약하기" />
+</form>
+<h2>예약 좌석 취소</h2>
+<form action="/seat/cancel" method="post">
+	<input type="hidden" name="mno" value="${mno}" />
+	<c:forEach var="seat" items="${seats}" varStatus="status">
+		<c:if test="${seat.reserved}">
+			<label style="display: inline-block; width: 60px;"> 
+				<input type="checkbox" name="seatIds" value="${seat.seatId}" /> 
+				${seat.seatNumber}
+			</label>
+		</c:if>
+	</c:forEach>
+	<br><br>
+	<input type="submit" value="예약 취소하기" />
+</form>
+
+
+
+<h2>영화 기대평 작성</h2>
+
+<form action="/review/scoreInsert" method="post">
+	<input type="hidden" name="mno" value="${mno}" /> <label>별점:</label> <select
+		name="score">
+		<option value="">선택</option>
+		<option value="1">★☆☆☆☆</option>
+		<option value="2">★★☆☆☆</option>
+		<option value="3">★★★☆☆</option>
+		<option value="4">★★★★☆</option>
+		<option value="5">★★★★★</option>
+	</select><br> <input type="submit" value="리뷰 등록">
+</form>
+
+<hr>
+
+<h3>상영 예정인 영화 기대평</h3>
+<c:if test="${empty reviews}">
+	<p>등록된 기대평이 없습니다.</p>
+</c:if>
+
+<table border="1" width="100%" cellpadding="5">
+	<tr>
+		<th>작성자</th>
+		<th>별점</th>
+
+	</tr>
+	<c:forEach var="r" items="${reviews}">
+		<tr>
+			<td>${r.id}</td>
+			<td><c:choose>
+					<c:when test="${r.score == 1}">★☆☆☆☆</c:when>
+					<c:when test="${r.score == 2}">★★☆☆☆</c:when>
+					<c:when test="${r.score == 3}">★★★☆☆</c:when>
+					<c:when test="${r.score == 4}">★★★★☆</c:when>
+					<c:when test="${r.score == 5}">★★★★★</c:when>
+					<c:otherwise>선택 안함</c:otherwise>
+				</c:choose></td>
+		</tr>
+	</c:forEach>
+</table>
+
+<script>
+	

@@ -1,0 +1,28 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h2>상영 종료 영화</h2>
+<c:forEach var="m" items="${downcoming}">
+    <tr>
+        <td>${m.title}</td>
+        <td>${m.period}</td>
+        <td>
+            <form action="/review/contentInsert" method="POST">
+                <input type="hidden" name="mno" value="${m.mno}">
+                <input type="hidden" name="id" value="${sessionScope.member.id}">
+                제목: <input type="text" name="title"><br>
+                내용: <textarea name="content"></textarea><br>
+                <input type="submit" value="등록">
+            </form>
+        </td>
+    </tr>
+</c:forEach>
+
+</body>
+</html>

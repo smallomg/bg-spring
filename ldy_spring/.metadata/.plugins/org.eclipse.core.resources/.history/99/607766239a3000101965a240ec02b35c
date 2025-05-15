@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.IAdminDao">
+
+	<select id="login" resultType="com.example.demo.dto.AdminDTO">
+		SELECT * FROM admin WHERE id = #{id} AND pw = #{pw}
+	</select>
+
+	<insert id="moviesinsert" parameterType="com.example.demo.dto.MovieDTO">
+    INSERT INTO movie (mno, title, hour, price, intro, period)
+    VALUES (movie_seq.NEXTVAL, #{title}, #{hour}, #{price}, #{intro}, #{period})
+	</insert>
+	
+	<!--공지사랑 전체 목록 조회-->
+	<select id="noticeList">
+		SELECT * FROM notice
+	</select>
+	
+</mapper>

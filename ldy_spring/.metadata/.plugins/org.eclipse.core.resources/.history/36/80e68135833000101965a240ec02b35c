@@ -1,0 +1,45 @@
+package com.example.demo.dao;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import com.example.demo.dto.MemberDTO;
+import com.example.demo.dto.ReviewDTO;
+import com.example.demo.dto.SeatDTO;
+
+
+@Mapper
+public interface IMemberDao {
+	
+	// 회원가입 등록
+	int signup(MemberDTO member);
+	
+	// 아이디 중복 체크
+	int idcheck(@Param("id") String id);
+	
+	// 회원 : 로그인 처리
+	MemberDTO login(@Param("id") String id,@Param("pw") String pw);
+	
+	// 회원 : 상영 예정인 영화 처리
+	int scroeinsert(ReviewDTO review);
+	
+	// 회원 : 상영 예정,종료 영화 별점, 제목내용 목록
+	List<ReviewDTO> getReviewList(@Param("mno") int mno);
+	
+	// 회원 : 상영 종료된 영화 처리
+	int contentForm(ReviewDTO review);
+	
+	// 회원 예약 시스템
+	List<SeatDTO> getSeatList();
+	
+	SeatDTO findBySeatNumber(@Param("seatNumber") String seatNumber);
+
+	int updateSeat(@Param("seatNumber") String seatNumber,
+	               @Param("result") int result,
+	               @Param("id") String id,
+	               @Param("mno") Integer mno);
+
+	List<SeatDTO> getSeatsByMovie(@Param("mno") int mno);
+}

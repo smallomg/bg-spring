@@ -1,0 +1,51 @@
+package com.example.demo.restcontroller;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
+import com.example.demo.dto.MemberDTO;
+
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@RestController
+public class RandomController {
+
+    @PostMapping("/random")
+    public String random(@RequestBody Map<String, Object> payload, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        MemberDTO member = (MemberDTO) session.getAttribute("member");
+
+        if (member == null) {
+            return "로그인 후 이용해주세요.";
+        }
+
+        String userId = member.getId(); // 회원 ID 기준
+        Map<String, Integer> tryMap = (Map<String, Integer>) session.getAttribute("tryMap");
+        if (tryMap == null) {
+            tryMap = new HashMap<>();
+            session.setAttribute("tryMap", tryMap);
+        }
+
+        int currentTry = tryMap.getOrDefault(userId, 0);
+        if (currentTry >= 3) {
+            return "❌ 3번의 기회를 모두 사용했습니다!";
+        }
+
+        tryMap.put(userId, currentTry + 1);
+
+        // 유저 랜덤 수
+        int userNum = Integer.parseInt(payload.get("num").toString());
+        // 컴퓨터 랜덤 수
+        int compNum = (int)(Math.random() * 10 + 1);
+
+        if (userNum == compNum) {
+            tryMap.put(userId, 3); // 맞추면 바로 끝내기
+            return "🎉 승리! (유저: " + userNum + ", 컴퓨터: " + compNum + ")";
+        } else {
+            return "😢 실패! (유저: " + userNum + ", 컴퓨터: " + compNum + ") | 남은 기회: " + (2 - currentTry);
+        }
+    }
+}

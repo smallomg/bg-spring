@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.IMovieDao">
+
+	<select id="getList" resultType="com.example.demo.dto.MovieDTO">
+		SELECT * FROM movie
+	</select>
+
+	<select id="downmovielist" resultType="com.example.demo.dto.MovieDTO">
+		SELECT * FROM movie WHERE SYSDATE - period >= 0
+	</select>
+	
+	<select id="upmovielist" resultType="com.example.demo.dto.MovieDTO">
+		SELECT * FROM movie WHERE SYSDATE - period <= 0
+	</select>
+
+
+</mapper>

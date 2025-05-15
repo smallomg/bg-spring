@@ -5,6 +5,10 @@
 		<item key="selection" value="plugins {"/>
 		<item key="replaceBarOpen" value="false"/>
 		<list key="findhistory">
+			<item value="extend"/>
+			<item value="login"/>
+			<item value="member"/>
+			<item value="reserveSeat"/>
 			<item value="getmember"/>
 			<item value="itemList"/>
 			<item value="URLEncoder"/>

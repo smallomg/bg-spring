@@ -1,0 +1,35 @@
+<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
+
+<h2>영화 후기 작성</h2>
+
+<form action="/review/contentInsert" method="post">
+	<input type="hidden" name="mno" value="${mno}" /> <br> <label>제목:</label>
+	<input type="text" name="title" /><br> <label>내용:</label>
+	<textarea name="content" rows="4" cols="40"></textarea>
+	<br> <input type="submit" value="리뷰 등록">
+</form>
+
+<hr>
+
+<h3>상영 종료된 영화 후기</h3>
+<c:if test="${empty reviews}">
+	<p>등록된 후기가 없습니다.</p>
+</c:if>
+
+<table border="1" width="100%" cellpadding="5">
+	<tr>
+		<th>작성자</th>
+		<th>제목</th>
+		<th>내용</th>
+
+	</tr>
+	<c:forEach var="r" items="${reviews}">
+		<tr>
+			<td>${r.id}</td>
+			<td>${r.title}</td>
+			<td>${r.content}</td>
+
+		</tr>
+	</c:forEach>
+</table>

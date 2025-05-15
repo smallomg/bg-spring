@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.IMemberDao">
+
+	<!-- 회원가입 등록 -->
+	<insert id="signup">
+		INSERT INTO tbl_member (id, pw, name, phone, grade)
+		VALUES (#{id}, #{pw}, #{name}, #{phone}, #{grade})
+	</insert>
+
+	<!--아이디 중복체크 -->
+	<select id="idcheck">
+		SELECT COUNT(*) FROM tbl_member WHERE id = #{id}
+	</select>
+
+	<!--회원 로그인 처리 -->
+	<select id="login">
+		SELECT * FROM tbl_member WHERE id=#{id}AND pw=#{pw}
+	</select>
+
+	<!--회원 : 상영 예정인 영화 처리 -->
+	<insert id="scroeinsert"
+		parameterType="com.example.demo.dto.ReviewDTO">
+		INSERT INTO review (
+		rno, score, id, mno
+		)
+		VALUES (
+		review_seq.NEXTVAL,
+
+		#{score, jdbcType=NUMERIC},
+		#{id, jdbcType=VARCHAR},
+		#{mno, jdbcType=NUMERIC}
+		)
+	</insert>
+
+	<!-- 회원 : 상영 예정,종료 영화 별점, 제목내용 목록 -->
+	<select id="getReviewList"
+		resultType="com.example.demo.dto.ReviewDTO">
+		SELECT rno, title, content, score, id, mno
+		FROM review
+		WHERE
+		mno = #{mno}
+		ORDER BY rno DESC
+	</select>
+
+	<!--회원 : 상영 종료된 영화 처리 -->
+	<insert id="contentForm"
+		parameterType="com.example.demo.dto.ReviewDTO">
+		INSERT INTO review (
+		rno, title, content, id, mno
+		)
+		VALUES
+		(
+		review_seq.NEXTVAL,
+		#{title, jdbcType=VARCHAR},
+		#{content,
+		jdbcType=VARCHAR},
+
+		#{id, jdbcType=VARCHAR},
+		#{mno, jdbcType=NUMERIC}
+		)
+	</insert>
+
+
+
+<!-- 좌석 목록 조회 (예약 여부 포함) -->
+<select id="getSeatsWithStatus" resultType="com.example.demo.dto.SeatDTO">
+	SELECT st.seat_id AS seatId,
+	       st.seat_number AS seatNumber,
+	       CASE WHEN ms.sno IS NULL THEN 0 ELSE 1 END AS reserved
+	FROM seat_template st
+	LEFT JOIN movie_seat ms
+	  ON st.seat_id = ms.seat_id AND ms.mno = #{mno}
+	ORDER BY st.seat_number
+</select>
+
+
+<!-- 좌석 예약 처리 -->
+<insert id="reserveSeat">
+	INSERT INTO movie_seat (sno, mno, seat_id, id, result)
+	VALUES (movie_seat_seq.NEXTVAL, #{mno}, #{seatId}, #{id}, 1)
+</insert>
+
+<delete id="cancelSeat">
+DELETE FROM movie_seat
+WHERE mno = #{mno} AND seat_id = #{seatId} AND id = #{id}
+</delete>
+
+</mapper>
+
+	
+

@@ -1,0 +1,36 @@
+package com.example.demo.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import com.example.demo.dao.IAdminDao;
+import com.example.demo.dto.AdminDTO;
+
+import jakarta.servlet.http.HttpServletRequest;
+
+@Controller
+public class AdminController {
+	
+	@Autowired
+	private IAdminDao iadminDao;
+
+	@GetMapping("/admin")
+	public String admin() {
+		System.out.println("admin login...");
+		return "admin_login";
+	}
+	
+	@GetMapping("/admin_login")
+	public String adminlogin(HttpServletRequest request, Model model) {
+		String id = request.getParameter("id");
+		String pw = request.getParameter("pw");
+		
+		AdminDTO admin = iadminDao.login(id, pw);
+		
+		return null;
+		
+	}
+	
+}

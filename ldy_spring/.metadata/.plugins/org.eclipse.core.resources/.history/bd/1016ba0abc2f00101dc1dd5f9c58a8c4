@@ -1,0 +1,53 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>메인 페이지 Main</h1>
+
+	<c:if test="${not empty sessionScope.admin}">
+    관리자입니다
+    <a href="admin_logout">로그아웃</a>
+    
+	</c:if>
+
+	<c:if test="${not empty sessionScope.member}">
+    회원입니다
+     <a href="logout">로그아웃</a>
+	</c:if>
+
+	<table border="1">
+		<thead>
+			<tr>
+				<th>mno 영화번호</th>
+				<th>title 제목</th>
+				<th>hour 시간</th>
+				<th>price 가격</th>
+				<th>period 기간</th>
+				<th>intro 소개글</th>
+
+			</tr>
+		</thead>
+
+		<tbody>
+			<c:forEach var="m" items="${movies}" varStatus="status">
+				<tr>
+					<td>${m.mno}</td>
+					<td>${m.title}분</td>
+					<td>${m.hour}분</td>
+					<td>${m.price}원</td>
+					<td>${m.period}</td>
+					<td>${m.intro}</td>
+				</tr>
+			</c:forEach>
+		</tbody>
+	</table>
+
+
+</body>
+</html>

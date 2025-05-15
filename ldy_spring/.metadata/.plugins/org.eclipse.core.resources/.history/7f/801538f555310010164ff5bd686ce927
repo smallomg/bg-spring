@@ -1,0 +1,32 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+</head>
+
+<body>
+	<h1>session Test</h1>
+	<p id=demo></p>
+	<a href="logout">로그아웃</a>
+</body>
+
+<script>
+	const demo = document.getElementById('demo');
+	
+	let cnt = 10; 
+	const intervalId = setInterval(() => {
+		demo.innerText = cnt + "초 후 로그아웃됩니다.";
+
+		if (cnt === 0) {
+			clearInterval(intervalId); 
+			window.location.href = "logout"; 
+		}
+
+		cnt--;
+	}, 1000); 
+</script>
+
+</html>

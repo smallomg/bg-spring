@@ -1,0 +1,11 @@
+package com.example.demo.dto;
+
+public class Review {
+
+	private int rno;
+	private String title;
+	private String content;
+	private int score;
+	private String id;
+	
+}

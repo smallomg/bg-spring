@@ -1,0 +1,10 @@
+package com.example.demo.restcontroller;
+
+
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+public class GameController {
+
+   public
+}
