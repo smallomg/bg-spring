@@ -2,18 +2,17 @@
 <section name="Workbench">
 	<item key="hasShownOverlayPopupBefore" value="true"/>
 	<section name="java.lang.Class">
-		<item key="selection" value="plugins {"/>
+		<item key="selection" value="&lt;%@ page contentType=&quot;text/html;charset=UTF-8&quot;%&gt;"/>
 		<item key="replaceBarOpen" value="false"/>
 		<list key="findhistory">
+			<item value="&lt;%@ page contentType=&quot;text/html;charset=UTF-8&quot;%&gt;"/>
+			<item value="&lt;%@ page contentType=&quot;text/html;charset=UTF-8&quot; %&gt;"/>
+			<item value="modalShown"/>
 			<item value="extend"/>
 			<item value="login"/>
 			<item value="member"/>
 			<item value="reserveSeat"/>
 			<item value="getmember"/>
-			<item value="itemList"/>
-			<item value="URLEncoder"/>
-			<item value="PathVariable "/>
-			<item value="plugins {"/>
 		</list>
 	</section>
 </section>

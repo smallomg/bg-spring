@@ -1,0 +1,41 @@
+package com.example.demo.controller;
+
+import org.springframework.stereotype.Controller;
+
+import org.springframework.web.bind.annotation.CrossOrigin;
+
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.example.demo.dto.QuizDTO;
+
+
+@CrossOrigin(origins = "*")
+@Controller
+public class ExController {
+
+	@RequestMapping("/")
+	public String root() {
+		return "index";
+	}
+	
+
+
+	@PostMapping("/api/submit")
+	@ResponseBody
+	public int submit(@RequestBody QuizDTO quiz) {
+	    int score = 0;
+
+	    if ("3".equals(quiz.getQ1())) score+=20;
+	    if ("한글".equals(quiz.getQ2())) score+=20;
+	    if ("1".equals(quiz.getQ3())) score+=20;
+	    if ("고진감래".equals(quiz.getQ4())) score+=20;
+	    if ("천도복숭아".equals(quiz.getQ5())) score+=20;
+	    if ("삐약".equals(quiz.getQ6())) score+=20;
+
+	    return score;
+	}
+
+}

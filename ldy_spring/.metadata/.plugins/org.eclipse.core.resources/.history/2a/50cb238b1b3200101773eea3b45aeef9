@@ -1,0 +1,45 @@
+package com.example.demo.controller;
+
+import java.util.Map;
+
+import org.springframework.stereotype.Controller;
+
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+
+@CrossOrigin(origins = "*")
+@Controller
+public class ExController {
+
+	@RequestMapping("/")
+	public String root() {
+		return "index";
+	}
+	
+	@GetMapping("/quiz")
+    public String showQuizPage() {
+        return "quiz"; 
+    }
+
+	 @PostMapping("/api/submit")
+	    public Map<String, Object> submit(
+	            @RequestParam String q1,
+	            @RequestParam String q2,
+	            @RequestParam String q3,
+	            @RequestParam String q4
+	    ) {
+	        int score = 0;
+
+	        if ("3".equals(q1)) score++;
+	        if ("한글".equals(q2)) score++;
+	        if ("1".equals(q3)) score++;
+	        if ("고진감래".equals(q4)) score++;
+
+	        return Map.of("score", score, "total", 4);
+	    }
+}

@@ -1,0 +1,16 @@
+package com.example.demo.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@CrossOrigin(origins = "*")
+@Controller
+public class CookController {
+
+	@GetMapping("/cook/maindish")
+	public String maindish() {
+		System.out.println("maindish......");
+		return "메인 요리가 나옵니다";
+	}
+}

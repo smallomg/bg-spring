@@ -1,0 +1,39 @@
+package com.example.demo.controller;
+
+import java.util.Map;
+
+import org.springframework.stereotype.Controller;
+
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+
+@CrossOrigin(origins = "*")
+@Controller
+public class ExController {
+
+	@RequestMapping("/")
+	public String root() {
+		return "index";
+	}
+	
+	@GetMapping("/quiz")
+    public String showQuizPage() {
+        return "quiz"; // resources/templates/quiz.html (Thymeleaf) or static/quiz.html
+    }
+
+    @PostMapping("/quiz/submit")
+    public Map<String, Object> submit(@RequestBody Map<String, String> answers) {
+        int score = 0;
+
+        if ("3".equals(answers.get("q1"))) score++; // 서울
+        if ("한글".equals(answers.get("q2"))) score++;
+        if ("1".equals(answers.get("q3"))) score++;
+        if ("고진감래".equals(answers.get("q4"))) score++;
+
+        return Map.of("score", score, "total", 4);
+    }
+}

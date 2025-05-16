@@ -1,0 +1,26 @@
+package com.example.demo.controller;
+
+import com.example.demo.dto.QuizDTO;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+@Controller
+public class QuizController {
+
+    @GetMapping("/")
+    public String quizForm(Model model) {
+        model.addAttribute("quiz", new QuizDTO());
+        return "quiz";
+    }
+
+    @PostMapping("/submit")
+    public String submitQuiz(@ModelAttribute QuizDTO quiz, Model model) {
+        int score = 0;
+
+
+        model.addAttribute("score", score);
+        model.addAttribute("answers", quiz);
+        return "result";
+    }
+}

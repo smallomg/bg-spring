@@ -1,0 +1,35 @@
+package com.example.demo.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.example.demo.dto.UserDTO;
+
+@CrossOrigin(origins = "*")
+@Controller
+public class CookController {
+
+	@GetMapping("/cook/maindish")
+	public @ResponseBody String maindish() {
+		System.out.println("maindish......");
+		return "메인 요리가 나옵니다";
+	}
+	
+	@GetMapping("/api/data")
+	public @ResponseBody String f() {
+		
+		return "성공";
+	}
+	
+	
+	@PostMapping("/api/post")
+	public @ResponseBody UserDTO f2(@RequestBody UserDTO user){
+		
+		return user;
+	}
+}
