@@ -1,0 +1,5 @@
+package com.example.demo.Session;
+
+public class UserSession {
+
+}

@@ -1,0 +1,149 @@
+package com.example.demo.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.example.demo.Session.UserSession;
+import com.example.demo.dto.UserDTO;
+import com.example.demo.service.UserService;
+
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
+@Controller
+public class MyController {
+
+	@Autowired
+	private UserSession userSession;
+
+	@Autowired
+	private UserService userService;
+
+	@GetMapping("/")
+	public String root() {
+		System.out.println("root.....");
+		return "index";
+	}
+
+	@GetMapping("/login")
+	public String login() {
+		return "login";
+	}
+
+	@PostMapping("/login")
+	public String login(
+	        @RequestParam("id") String id, 
+	        @RequestParam("pw") String pw, 
+	        HttpSession session,
+	        HttpServletRequest request, 
+	        RedirectAttributes rttr,
+	        HttpServletResponse response
+	) {
+
+	    UserDTO result = userService.loginCheck(id, pw); // 🔧 DB 인증
+
+	    if (result != null) {
+	        // ✅ 세션 저장 (기본 인증 유지용)
+	        userSession.login(result);
+
+	        // ✅ 쿠키 저장 (자동 로그인 등 목적)
+	        Cookie idCookie = new Cookie("loginId", result.getId()); // 객체 X, ID만 저장
+	        idCookie.setPath("/");               // 전체 경로에서 사용
+	        idCookie.setMaxAge(60 * 60 * 24);    // 1일 동안 유지
+	        idCookie.setHttpOnly(true);          // JS 접근 방지
+	        idCookie.setSecure(true);            // HTTPS에서만 전송 (테스트 시 생략 가능)
+	        response.addCookie(idCookie);
+	        System.out.println("쿠키 저장 완료");
+	        
+	        return "redirect:/success";
+	    } else {
+	        rttr.addFlashAttribute("msg", "아이디 또는 비밀번호가 잘못되었습니다.");
+	        return "redirect:/login";
+	    }
+	}
+
+
+	@GetMapping("/success")
+	public String success(HttpServletRequest request, Model model, RedirectAttributes rttr) {
+	    // 1. 세션 먼저 확인
+	    if (!userSession.isLogedIn()) {
+	        // 2. 쿠키로 로그인 여부 확인 시도
+	        Cookie[] cookies = request.getCookies();
+	        String idFromCookie = null;
+
+	        if (cookies != null) {
+	            for (Cookie c : cookies) {
+	                if (c.getName().equals("loginId")) {
+	                    idFromCookie = c.getValue();
+	                }
+	            }
+	        }
+
+	        if (idFromCookie != null) {
+	            // DB에서 사용자 조회 후 세션에 다시 저장
+	            UserDTO user = userService.findById(idFromCookie);
+	            if (user != null) {
+	                userSession.login(user); // 세션 복구
+	            } else {
+	                rttr.addFlashAttribute("msg", "로그인 정보가 유효하지 않습니다.");
+	                return "redirect:/login";
+	            }
+	        } else {
+	            rttr.addFlashAttribute("msg", "로그인 후 이용해주세요");
+	            return "redirect:/login";
+	        }
+	    }
+
+	    model.addAttribute("user", userSession.getLoginUser());
+	    return "success";
+	}
+
+
+	@GetMapping("/logout")
+	public String logout(HttpServletResponse response, HttpSession session) {
+
+	    // 1. 세션 삭제
+	    session.invalidate();
+
+	    // 2. 쿠키 삭제
+	    Cookie cookie = new Cookie("loginId", null);
+	    cookie.setMaxAge(0); // 즉시 만료
+	    cookie.setPath("/"); // 생성 시와 동일해야 함
+	    response.addCookie(cookie);
+
+	    return "redirect:/login";
+	}
+
+
+	@GetMapping("/set-cookie")
+	public @ResponseBody String setCookie(HttpServletResponse response) {
+		Cookie cookie = new Cookie("Mycookie", "sogood");
+		cookie.setPath("/");
+		response.addCookie(cookie);
+
+		return "cookie-set";
+	}
+
+	@GetMapping("/read-cookie")
+	public @ResponseBody String readCookie(HttpServletRequest request) {
+		Cookie[] cookies = request.getCookies();
+		if(cookies != null) {
+			for(Cookie cookie : cookies) {
+				if(cookie.getName().equals("Mycookie")) {
+					System.out.println(cookie.getValue());
+				}
+			}
+			
+		}
+		return "cookie read";
+	}
+	
+	// 사용자 인증 처리
+}

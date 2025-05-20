@@ -1,0 +1,73 @@
+package com.example.demo.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.example.demo.Session.UserSession;
+import com.example.demo.dto.UserDTO;
+import com.example.demo.service.UserService;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
+@Controller
+public class MyController {
+
+	@Autowired
+	private UserSession userSession;
+
+	@Autowired
+	private UserService userService;
+
+	@GetMapping("/")
+	public String root() {
+		System.out.println("root.....");
+		return "index";
+	}
+
+	@GetMapping("/login")
+	public String login() {
+		return "login";
+	}
+
+	@PostMapping("/login")
+	public String login(@RequestParam("id") String id, @RequestParam("pw") String pw, HttpSession session,HttpServletRequest request,
+			RedirectAttributes rttr) {
+
+		UserDTO result = userService.loginCheck(id, pw); // 🔧 인스턴스 메서드 호출
+		if (result != null) {
+			// session.setAttribute("user",result);
+			userSession.login(result);
+			
+			return "success";
+		} else {
+			rttr.addFlashAttribute("msg", "아이디 또는 비밀번호가 잘못되었습니다.");
+			return "redirect:/login"; // 🔧 슬래시 빠짐 보완
+		}
+	}
+
+	@GetMapping("/success")
+	public String success(RedirectAttributes rttr) {
+		if(!userSession.isLogedIn()) {
+			rttr.addFlashAttribute("msg","로그인 후 이용해주세요")
+			return"redirect:/login";
+		}
+		else {
+			return "success";
+		}
+	}
+	
+	@GetMapping("/logout")
+	public String logout(HttpSession session,RedirectAttributes rttr) {
+		//session.invalidate();
+		userSession.logout();
+		rttr.addAttribute("msg","방금 로그아웃하였습니다");
+		
+		
+		return"redirect:/login";
+	}
+
+}
